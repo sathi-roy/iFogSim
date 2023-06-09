@@ -44,6 +44,11 @@ public class Application {
 	protected Map<String, List<String>> specialPlacementInfo = new HashMap<>(); // module name to placement device staring with
 
 	protected DAG dag;
+	
+	//Sathis created Map
+	private Map<Integer, Map<String, Double>> deadlineInfo;
+	private Map<Integer, Map<String, Integer>> additionalMipsInfo;
+
 
 	/**
 	 * Creates a plain vanilla application with no modules and edges.
@@ -397,4 +402,28 @@ public class Application {
 	public DAG getDAG() {
 		return dag;
 	}
+	
+	//sathis method for deadline settings
+	
+	public Map<Integer, Map<String, Integer>> getAdditionalMipsInfo() {
+		return additionalMipsInfo;
+		}
+		public void setAdditionalMipsInfo(
+		Map<Integer, Map<String, Integer>> additionalMipsInfo) {
+		this.additionalMipsInfo = additionalMipsInfo;
+		}
+		public void setDeadlineInfo(Map<Integer, Map<String, Double>> deadlineInfo) {
+		this.deadlineInfo = deadlineInfo;
+		}
+		public Map<Integer, Map<String, Double>> getDeadlineInfo() {
+		return deadlineInfo;
+		}
+		public void addAppModule(String moduleName,int ram, int mips, long 
+		size, long bw){
+		String vmm = "Xen";
+		AppModule module = new AppModule(FogUtils.generateEntityId(), 
+		moduleName, appId, userId, 
+		mips, ram, bw, size, vmm, new TupleScheduler(mips, 1), 
+		new HashMap<Pair<String, String>, SelectivityModel>());
+		getModules().add(module); }
 }

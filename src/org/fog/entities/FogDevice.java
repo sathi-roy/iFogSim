@@ -77,6 +77,7 @@ public class FogDevice extends PowerDatacenter {
     protected double ratePerMips;
 
     protected double totalCost;
+    public double sathicost;
 
     protected Map<String, Map<String, Integer>> moduleInstanceCount;
 
@@ -98,6 +99,12 @@ public class FogDevice extends PowerDatacenter {
             double schedulingInterval,
             double uplinkBandwidth, double downlinkBandwidth, double uplinkLatency, double ratePerMips) throws Exception {
         super(name, characteristics, vmAllocationPolicy, storageList, schedulingInterval);
+        
+        long storage = 1000000; // host storage
+        int bw = 10000;
+        int mem =100;
+        double localVarsathicost =0;
+        
         setCharacteristics(characteristics);
         setVmAllocationPolicy(vmAllocationPolicy);
         setLastProcessTime(0.0);
@@ -112,6 +119,7 @@ public class FogDevice extends PowerDatacenter {
         for (Host host : getCharacteristics().getHostList()) {
             host.setDatacenter(this);
         }
+        
         setActiveApplications(new ArrayList<String>());
         // If this resource doesn't have any PEs then no useful at all
         if (getCharacteristics().getNumberOfPes() == 0) {
@@ -137,7 +145,11 @@ public class FogDevice extends PowerDatacenter {
         this.lockTime = 0;
 
         this.energyConsumption = 0;
-        this.lastUtilization = 0;
+        System.out.println("first fog");
+        localVarsathicost = ((getCharacteristics().getCostPerMem()* mem)+
+        		(getCharacteristics().getCostPerBw()* bw));
+        Setsathicost(localVarsathicost);      
+        this.lastUtilization = 0.2;
         setTotalCost(0);
         setModuleInstanceCount(new HashMap<String, Map<String, Integer>>());
         setChildToLatencyMap(new HashMap<Integer, Double>());
@@ -225,7 +237,8 @@ public class FogDevice extends PowerDatacenter {
         this.lockTime = 0;
 
         this.energyConsumption = 0;
-        this.lastUtilization = 0;
+        this.lastUtilization = 0.1;
+        System.out.println("second fog");
         setTotalCost(0);
         setChildToLatencyMap(new HashMap<Integer, Double>());
         setModuleInstanceCount(new HashMap<String, Map<String, Integer>>());
@@ -594,7 +607,7 @@ public class FogDevice extends PowerDatacenter {
 
     }
 
-    private void updateEnergyConsumption() {
+    public void updateEnergyConsumption() {
         double totalMipsAllocated = 0;
         for (final Vm vm : getHost().getVmList()) {
             AppModule operator = (AppModule) vm;
@@ -610,18 +623,21 @@ public class FogDevice extends PowerDatacenter {
 	
 		/*if(getName().equals("d-0")){
 			System.out.println("------------------------");
-			System.out.println("Utilization = "+lastUtilization);
+			System.out.println("Utilization = "+ lastUtilization);
+			System.out.println("EnergyConsumption = "+ newEnergyConsumption);
 			System.out.println("Power = "+getHost().getPowerModel().getPower(lastUtilization));
+			System.out.println("timenow" + timeNow);
 			System.out.println(timeNow-lastUtilizationUpdateTime);
 		}*/
 
         double currentCost = getTotalCost();
         double newcost = currentCost + (timeNow - lastUtilizationUpdateTime) * getRatePerMips() * lastUtilization * getHost().getTotalMips();
         setTotalCost(newcost);
-
+        //System.out.println("SATHIIIIIIIIIIIII new cost" + newcost);
         lastUtilization = Math.min(1, totalMipsAllocated / getHost().getTotalMips());
         lastUtilizationUpdateTime = timeNow;
     }
+    
 
     protected void processAppSubmit(SimEvent ev) {
         Application app = (Application) ev.getData();
@@ -1181,6 +1197,14 @@ public class FogDevice extends PowerDatacenter {
 
     public Queue<Pair<Tuple, Integer>> getClusterTupleQueue() {
         return clusterTupleQueue;
+    }
+    
+    public void Setsathicost(double sathicost) {
+    	this.sathicost = sathicost;
+    }
+    
+    public double Getsathicost() {
+    	return sathicost;
     }
 
 

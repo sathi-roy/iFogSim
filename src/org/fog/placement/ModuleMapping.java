@@ -34,10 +34,14 @@ public class ModuleMapping {
 	 * @param instanceCount
 	 */
 	public void addModuleToDevice(String moduleName, String deviceName){
-		if(!getModuleMapping().containsKey(deviceName))
+		if(!getModuleMapping().containsKey(deviceName)) {
+			System.out.println("i am in first if of module mapping" + deviceName);
 			getModuleMapping().put(deviceName, new ArrayList<String>());
-		if(!getModuleMapping().get(deviceName).contains(moduleName))
+		}
+		if(!getModuleMapping().get(deviceName).contains(moduleName)) {
+			System.out.println("i am in second if of module mapping" + moduleName);
 			getModuleMapping().get(deviceName).add(moduleName);
+		}
 	}
 	
 }

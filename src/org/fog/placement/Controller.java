@@ -89,20 +89,26 @@ public class Controller extends SimEntity{
 	public void processEvent(SimEvent ev) {
 		switch(ev.getTag()){
 		case FogEvents.APP_SUBMIT:
+			System.out.println("I am here app_submit");
 			processAppSubmit(ev);
 			break;
 		case FogEvents.TUPLE_FINISHED:
+			System.out.println("I am here TUPLE_FINISHED");
 			processTupleFinished(ev);
 			break;
 		case FogEvents.CONTROLLER_RESOURCE_MANAGE:
+			System.out.println("I am here CONTROLLER_RESOURCE_MANAGE");
 			manageResources();
 			break;
 		case FogEvents.STOP_SIMULATION:
 			CloudSim.stopSimulation();
 			printTimeDetails();
+			System.out.println("I am here printPowerDetails");
 			printPowerDetails();
 			printCostDetails();
+			printExecutionCost();
 			printNetworkUsageDetails();
+			System.out.println("I am here STOP_SIMULATION");
 			System.exit(0);
 			break;
 			
@@ -114,14 +120,24 @@ public class Controller extends SimEntity{
 	}
 
 	private FogDevice getCloud(){
-		for(FogDevice dev : getFogDevices())
+		for(FogDevice dev : getFogDevices()) {
+			System.out.println("dev " + dev.getName());
 			if(dev.getName().equals("cloud"))
 				return dev;
+		}
 		return null;
 	}
 	
 	private void printCostDetails(){
-		System.out.println("Cost of execution in cloud = "+getCloud().getTotalCost());
+		//System.out.println("Cost of execution in cloud = "+getCloud().getTotalCost());
+		System.out.println("Total Cost of execution = "+getCloud().getTotalCost()); //Sathi's code
+	}
+	
+	//sathi's code
+	private void printExecutionCost() {
+		for(FogDevice fogDevice : getFogDevices()){
+			System.out.println(fogDevice.getName() + " : Cost of execution = "+fogDevice.Getsathicost());
+		}
 	}
 	
 	private void printPowerDetails() {
@@ -149,8 +165,8 @@ public class Controller extends SimEntity{
 		System.out.println("APPLICATION LOOP DELAYS");
 		System.out.println("=========================================");
 		for(Integer loopId : TimeKeeper.getInstance().getLoopIdToTupleIds().keySet()){
-			/*double average = 0, count = 0;
-			for(int tupleId : TimeKeeper.getInstance().getLoopIdToTupleIds().get(loopId)){
+			double average = 0, count = 0;
+			/*for(int tupleId : TimeKeeper.getInstance().getLoopIdToTupleIds().get(loopId)){
 				Double startTime = 	TimeKeeper.getInstance().getEmitTimes().get(tupleId);
 				Double endTime = 	TimeKeeper.getInstance().getEndTimes().get(tupleId);
 				if(startTime == null || endTime == null)

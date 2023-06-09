@@ -35,7 +35,7 @@ public class Sensor extends SimEntity{
 		this.setAppId(appId);
 		this.gatewayDeviceId = gatewayDeviceId;
 		this.geoLocation = geoLocation;
-		this.outputSize = 3;
+		this.outputSize = 1;
 		this.setTransmitDistribution(transmitDistribution);
 		setUserId(userId);
 		setDestModuleName(destModuleName);
@@ -76,7 +76,41 @@ public class Sensor extends SimEntity{
 		setUserId(userId);
 	}
 	
+	//Multiple tuple sathi's code
+	static int numOfMaxTuples = 100; 
+	static int tuplesCount = 0;
+	
 	public void transmit(){
+		System.out.print(CloudSim.clock()+": ");
+		if(tuplesCount<numOfMaxTuples){
+		AppEdge _edge = null;
+		for(AppEdge edge : getApp().getEdges()){
+		if(edge.getSource().equals(getTupleType()))
+		_edge = edge;
+		}
+		long cpuLength = (long) _edge.getTupleCpuLength();
+		long nwLength = (long) _edge.getTupleNwLength();
+		
+		Tuple tuple = new Tuple(getAppId(), FogUtils.generateTupleId(), Tuple.UP, cpuLength, 1, nwLength, outputSize, 
+				new UtilizationModelFull(), new UtilizationModelFull(), new UtilizationModelFull());
+		tuple.setUserId(getUserId());
+		tuple.setTupleType(getTupleType());
+		
+		tuple.setDestModuleName(_edge.getDestination());
+		tuple.setSrcModuleName(getSensorName());
+		Logger.debug(getName(), "Sending tuple with tupleId = "+tuple.getCloudletId());
+
+		tuple.setDestinationDeviceId(getGatewayDeviceId());
+
+		int actualTupleId = updateTimings(getSensorName(), tuple.getDestModuleName());
+		tuple.setActualTupleId(actualTupleId);
+		
+		send(gatewayDeviceId, getLatency(), FogEvents.TUPLE_ARRIVAL,tuple);
+		tuplesCount++;
+	}
+	}
+	
+	/*public void transmit(){
 		AppEdge _edge = null;
 		for(AppEdge edge : getApp().getEdges()){
 			if(edge.getSource().equals(getTupleType()))
@@ -100,7 +134,7 @@ public class Sensor extends SimEntity{
 		tuple.setActualTupleId(actualTupleId);
 		
 		send(gatewayDeviceId, getLatency(), FogEvents.TUPLE_ARRIVAL,tuple);
-	}
+	}*/
 	
 	protected int updateTimings(String src, String dest){
 		Application application = getApp();

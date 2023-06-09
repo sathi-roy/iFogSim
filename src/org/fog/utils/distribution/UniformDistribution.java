@@ -13,7 +13,8 @@ public class UniformDistribution extends Distribution{
 	
 	@Override
 	public double getNextValue() {
-		return getRandom().nextDouble()*(getMax()-getMin())+getMin();
+		//return getRandom().nextDouble()*(getMax()-getMin())+getMin();
+		return (getMax()-getMin())+getMin();
 	}
 
 	public double getMin() {

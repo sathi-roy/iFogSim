@@ -90,6 +90,7 @@ public abstract class SimEntity implements Cloneable {
 		if (!CloudSim.running()) {
 			return;
 		}
+		System.out.println("Sathi: this Schedule function is in use for upstream data scheduling");
 		CloudSim.send(id, dest, delay, tag, data);
 	}
 

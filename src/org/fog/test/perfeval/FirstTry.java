@@ -61,7 +61,7 @@ public class FirstTry {
 				    file.createNewFile();
 				    Log.setOutput(new FileOutputStream(file));
 				    Log.printLine("Starting Sathi's First try...");
-				    Log.disable();
+				    //Log.disable();
 					int num_user = 3;
 					Calendar calendar = Calendar.getInstance();
 					boolean trace_flag = false;
@@ -87,11 +87,11 @@ public class FirstTry {
 									:(new ModulePlacementEdgewards(fogDevices, sensors, actuators, application, moduleMapping)));
 					//controller.submitApplication(application, new ModulePlacementMapping(fogDevices, application, moduleMapping));
 					TimeKeeper.getInstance().setSimulationStartTime(Calendar.getInstance().getTimeInMillis());
-					Log.printLine("Befor start simulation!");
+					System.out.println("Befor start simulation!");
 					CloudSim.startSimulation();
 					Log.printLine("Befor stop simulation!");
 					CloudSim.stopSimulation();
-					Log.printLine("At the end!");
+					System.out.println("At the end!");
 					} catch (Exception e) {
 						e.printStackTrace();
 						Log.printLine("Unwanted errors happen");
@@ -124,6 +124,7 @@ public class FirstTry {
 				cloud.setParentId(-1);
 				fogDevices.add(cloud);
 				deviceById.put(cloud.getId(), cloud);
+				System.out.println("Cloud.getId()" + cloud.getId());
 				for(int i=0;i<numOfGateways;i++){
 						FogDevice device = createAFogDevice("FogDevice-"+i, getvalue(12000, 15000), getvalue(4000, 8000), 
 						getvalue(200, 300), getvalue(500, 1000), 1, 0.01, getvalue(100,120), getvalue(70, 75));
@@ -131,6 +132,7 @@ public class FirstTry {
 						device.setUplinkLatency(10);
 						fogDevices.add(device);
 						getIdByName.put(device.getName(), device.getId());
+						System.out.println("device.getId()" + device.getName() + device.getId());
 				        addGw(i+"", userId, appId, cloud.getId()); 
 				  }
 				}
@@ -171,6 +173,7 @@ public class FirstTry {
 					4000, 10000, 10000, 1, 0.0, 107.339, 83.4333);
 					fogDevices.add(gw);
 					deviceById.put(gw.getId(), gw);
+					System.out.println("gw.getId()" + gw.getId());
 					gw.setParentId(parentId);
 					gw.setUplinkLatency(4); 
 					for(int i=0;i<numOfEndDevPerGateway;i++){
@@ -194,8 +197,10 @@ public class FirstTry {
 				userId, appId, "IoTActuator");
 				actuators.add(actuator);
 				sensor.setGatewayDeviceId(end.getId());
+				System.out.println("Sersor: end.getId()" + end.getId());//6
 				sensor.setLatency(6.0); // latency of connection between EEG sensors and the parent Smartphone is 6 ms
 				actuator.setGatewayDeviceId(end.getId());
+				System.out.println("actuator: end.getId()" + end.getId());
 				actuator.setLatency(1.0); // latency of connection between Display actuator and the parent Smartphone is 1 ms
 				return end;
 				}

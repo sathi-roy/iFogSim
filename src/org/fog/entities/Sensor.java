@@ -77,11 +77,12 @@ public class Sensor extends SimEntity{
 	}
 	
 	//Multiple tuple sathi's code
-	static int numOfMaxTuples = 100; 
+	/*static int numOfMaxTuples = 100; 
 	static int tuplesCount = 0;
 	
 	public void transmit(){
-		System.out.print(CloudSim.clock()+": ");
+		//System.out.print(CloudSim.clock()+": ");
+		//System.out.print("I am here in transmit");
 		if(tuplesCount<numOfMaxTuples){
 		AppEdge _edge = null;
 		for(AppEdge edge : getApp().getEdges()){
@@ -93,24 +94,31 @@ public class Sensor extends SimEntity{
 		
 		Tuple tuple = new Tuple(getAppId(), FogUtils.generateTupleId(), Tuple.UP, cpuLength, 1, nwLength, outputSize, 
 				new UtilizationModelFull(), new UtilizationModelFull(), new UtilizationModelFull());
+		System.out.println("   tuple value:  " + tuple);
 		tuple.setUserId(getUserId());
 		tuple.setTupleType(getTupleType());
 		
 		tuple.setDestModuleName(_edge.getDestination());
+		System.out.println("   destination " + _edge.getDestination());
 		tuple.setSrcModuleName(getSensorName());
-		Logger.debug(getName(), "Sending tuple with tupleId = "+tuple.getCloudletId());
+		System.out.println("     source " + getSensorName());
+		System.out.println("getName()"+ getName() + "Sending tuple with tupleId = "+tuple.getCloudletId());
 
 		tuple.setDestinationDeviceId(getGatewayDeviceId());
 
 		int actualTupleId = updateTimings(getSensorName(), tuple.getDestModuleName());
 		tuple.setActualTupleId(actualTupleId);
 		
+		/*if(tuplesCount%2==0) {
 		send(gatewayDeviceId, getLatency(), FogEvents.TUPLE_ARRIVAL,tuple);
+		System.out.println("  count tuplesCount" + tuplesCount);
+		}*/
+		/*send(gatewayDeviceId, getLatency(), FogEvents.TUPLE_ARRIVAL,tuple);
 		tuplesCount++;
 	}
-	}
+	}*/
 	
-	/*public void transmit(){
+	public void transmit(){
 		AppEdge _edge = null;
 		for(AppEdge edge : getApp().getEdges()){
 			if(edge.getSource().equals(getTupleType()))
@@ -134,7 +142,7 @@ public class Sensor extends SimEntity{
 		tuple.setActualTupleId(actualTupleId);
 		
 		send(gatewayDeviceId, getLatency(), FogEvents.TUPLE_ARRIVAL,tuple);
-	}*/
+	}
 	
 	protected int updateTimings(String src, String dest){
 		Application application = getApp();

@@ -261,8 +261,8 @@ public class FogDevice extends PowerDatacenter {
     @Override
     protected void processOtherEvent(SimEvent ev) {
         switch (ev.getTag()) {
-            case FogEvents.TUPLE_ARRIVAL:
-                processTupleArrival(ev);
+            case FogEvents.TUPLE_ARRIVAL: 	
+            	processTupleArrival(ev);
                 break;
             case FogEvents.LAUNCH_MODULE:
                 processModuleArrival(ev);
@@ -546,6 +546,7 @@ public class FogDevice extends PowerDatacenter {
     protected void updateTimingsOnSending(Tuple resTuple) {
         // TODO ADD CODE FOR UPDATING TIMINGS WHEN A TUPLE IS GENERATED FROM A PREVIOUSLY RECIEVED TUPLE.
         // WILL NEED TO CHECK IF A NEW LOOP STARTS AND INSERT A UNIQUE TUPLE ID TO IT.
+    	
         String srcModule = resTuple.getSrcModuleName();
         String destModule = resTuple.getDestModuleName();
         for (AppLoop loop : getApplicationMap().get(resTuple.getAppId()).getLoops()) {
@@ -696,9 +697,9 @@ public class FogDevice extends PowerDatacenter {
             updateCloudTraffic();
         }
 		
-		/*if(getName().equals("d-0") && tuple.getTupleType().equals("_SENSOR")){
+		if(getName().equals("d-0") && tuple.getTupleType().equals("_SENSOR")){
 			System.out.println(++numClients);
-		}*/
+		}
         Logger.debug(getName(), "Received tuple " + tuple.getCloudletId() + "with tupleType = " + tuple.getTupleType() + "\t| Source : " +
                 CloudSim.getEntityName(ev.getSource()) + "|Dest : " + CloudSim.getEntityName(ev.getDestination()));
 		

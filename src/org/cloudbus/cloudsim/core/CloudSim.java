@@ -185,6 +185,7 @@ public class CloudSim {
 	public static double startSimulation() throws NullPointerException {
 		Log.printLine("Starting CloudSim version " + CLOUDSIM_VERSION_STRING);
 		try {
+			
 			double clock = run();
 
 			// reset all static variables
@@ -516,6 +517,7 @@ public class CloudSim {
 
 		for (int i = 0; i < entities_size; i++) {
 			ent = entities.get(i);
+			System.out.println("ent  ---->>" + ent );
 			if (ent.getState() == SimEntity.RUNNABLE) {
 				ent.run();
 			}
@@ -600,8 +602,10 @@ public class CloudSim {
 		if (delay < 0) {
 			throw new IllegalArgumentException("Send delay can't be negative.");
 		}
-
+		System.out.println("Sathi:Cloudsim.send");
+		System.out.println("Sathi:Source" + src + "Dest" + dest);
 		SimEvent e = new SimEvent(SimEvent.SEND, clock + delay, src, dest, tag, data);
+		System.out.println("Sathi: Added in future event list");
 		future.addEvent(e);
 	}
 
@@ -814,7 +818,7 @@ public class CloudSim {
 		running = true;
 		// Start all the entities
 		for (SimEntity ent : entities) {
-			//System.out.println("From CloudSim.runStart(): Starting SimEntity "+ent.getName());
+			System.out.println("From CloudSim.runStart(): Starting SimEntity "+ent.getName());
 			ent.startEntity();
 		}
 
